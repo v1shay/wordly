@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wordly</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="app" role="main">
+      <header class="header" role="banner">
+        <h1 class="title">Wordly</h1>
+        <p class="subtitle">Counts words in your current selection.</p>
+      </header>
+
+      <section class="card" aria-labelledby="selection-heading">
+        <h2 id="selection-heading" class="section-title">Selection</h2>
+
+        <div class="result" role="status" aria-live="polite" aria-atomic="true">
+          <div class="result-left">
+            <span class="result-label">Word count</span>
+            <output id="selectionCount" class="result-value">—</output>
+          </div>
+          <div id="selectionStatus" class="status">Reading selection…</div>
+        </div>
+
+        <details class="details" id="selectionDetails" hidden>
+          <summary class="details-summary">Selected text</summary>
+          <pre id="selectionPreview" class="preview" aria-label="Selected text preview"></pre>
+        </details>
+      </section>
+
+      <section class="card" aria-labelledby="manual-heading">
+        <h2 id="manual-heading" class="section-title">Manual input</h2>
+
+        <label class="label" for="textInput">Paste text to count</label>
+        <textarea
+          id="textInput"
+          class="textarea"
+          rows="6"
+          placeholder="Paste or type text here…"
+          spellcheck="false"
+        ></textarea>
+
+        <div class="actions">
+          <button id="countBtn" class="button" type="button">Count Words</button>
+          <button id="clearBtn" class="button button--secondary" type="button">Clear</button>
+        </div>
+
+        <div class="manual-result" role="status" aria-live="polite" aria-atomic="true">
+          <span class="manual-label">Total words:</span>
+          <output id="manualCount" class="manual-value">0</output>
+        </div>
+      </section>
+
+      <footer class="footer" role="contentinfo">
+        <small>Whitespace-separated words; extra whitespace ignored.</small>
+      </footer>
+    </main>
+
+    <script src="popup.js" defer></script>
+  </body>
+</html>
