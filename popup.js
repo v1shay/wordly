@@ -43,6 +43,10 @@ async function getActiveTab() {
   });
 }
 
+/* =========================================================
+   ✅ FIXED SELECTION SOURCE (ONLY CHANGE)
+   Replaced content-script messaging with executeScript
+   ========================================================= */
 async function requestSelectionTextFromContentScript() {
   const tab = await getActiveTab();
   if (!tab || typeof tab.id !== "number") {
@@ -50,14 +54,31 @@ async function requestSelectionTextFromContentScript() {
   }
 
   return new Promise((resolve) => {
-    chrome.tabs.sendMessage(tab.id, { type: "WORDLY_GET_SELECTION" }, (response) => {
-      if (chrome.runtime.lastError) {
-        resolve({ ok: false, text: "", reason: chrome.runtime.lastError.message });
-        return;
-      }
+    chrome.scripting.executeScript(
+      {
+        target: { tabId: tab.id },
+        func: () => {
+          try {
+            return window.getSelection()?.toString() || "";
+          } catch {
+            return "";
+          }
+        }
+      },
+      (results) => {
+        if (chrome.runtime.lastError) {
+          resolve({
+            ok: false,
+            text: "",
+            reason: chrome.runtime.lastError.message
+          });
+          return;
+        }
 
-      resolve({ ok: true, text: response && typeof response.text === "string" ? response.text : "" });
-    });
+        const text = results?.[0]?.result || "";
+        resolve({ ok: true, text });
+      }
+    );
   });
 }
 
@@ -94,15 +115,19 @@ async function init() {
   const res = await requestSelectionTextFromContentScript();
 
   if (!res.ok) {
-    // Typically happens on chrome:// pages or other restricted contexts.
     setSelectionUI({ text: "", status: "No text selected" });
     return;
   }
 
   const selectionText = res.text || "";
-  setSelectionUI({ text: selectionText, status: selectionText.trim() ? "Selected text found" : "No text selected" });
+  setSelectionUI({
+    text: selectionText,
+    status: selectionText.trim()
+      ? "Selected text found"
+      : "No text selected"
+  });
 
-  // If user has a selection, prefill manual textarea for convenience.
+  // Prefill manual textarea if selection exists
   const textarea = el("textInput");
   if (selectionText && selectionText.trim().length > 0) {
     textarea.value = selectionText;
