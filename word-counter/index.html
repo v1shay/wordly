@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Word Counter</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="container">
+        <h1 class="title">Word Counter</h1>
+        <p class="subtitle">Paste text below and count the words (whitespace-separated).</p>
+      </div>
+    </header>
+
+    <main class="container" role="main">
+      <section class="card" aria-labelledby="input-heading">
+        <h2 id="input-heading" class="section-title">Input</h2>
+
+        <label class="label" for="textInput">Text to count</label>
+        <textarea
+          id="textInput"
+          class="textarea"
+          name="text"
+          rows="10"
+          placeholder="Paste or type your text here…"
+          spellcheck="false"
+        ></textarea>
+
+        <div class="actions">
+          <button id="countBtn" class="button" type="button">Count Words</button>
+          <button id="clearBtn" class="button button--secondary" type="button">Clear</button>
+        </div>
+
+        <div class="result" role="status" aria-live="polite" aria-atomic="true">
+          <span class="result-label">Total words:</span>
+          <output id="wordCount" class="result-value">0</output>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="rules-heading">
+        <h2 id="rules-heading" class="section-title">Rules</h2>
+        <ul class="rules">
+          <li>Words are separated by whitespace.</li>
+          <li>Extra spaces, tabs, and newlines are ignored.</li>
+          <li>Empty input returns 0.</li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+      <div class="container">
+        <small>Built with HTML, CSS, and vanilla JavaScript.</small>
+      </div>
+    </footer>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
